@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tides_of_battle.dart';
 
 void main() {
   runApp(const GoT());
@@ -14,15 +15,9 @@ class GoT extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text("Battle")),
         body: Column(
-          children: const [
-            Expanded(child: Card(tekst: "Threes")),
-            Expanded(child: Card(tekst: "Twos")),
-            Expanded(child: Card(tekst: "One Sword")),
-            Expanded(child: Card(tekst: "One Fortification")),
-            Expanded(child: Card(tekst: "Zero")),
-            Expanded(child: Card(tekst: "Zero and Die")),
-            Expanded(child: Card(tekst: "Total")),
-          ],
+          children: CardDeck.cards.entries.map((entry) {
+            return Expanded(child: Card(entry.value, entry.key));
+          }).toList(),
         ),
       ),
     );
@@ -30,19 +25,22 @@ class GoT extends StatelessWidget {
 }
 
 class Card extends StatelessWidget {
-  final String tekst;
-  const Card({Key? key, required this.tekst}) : super(key: key);
+  static int cardsLeft = CardDeck.cards["total"]!;
+  final String cardText;
+  final int count;
+  const Card(this.count, this.cardText, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
+        // Count field
+        Expanded(
           flex: 2,
           child: Center(
             child: Text(
-              "2",
-              style: TextStyle(fontSize: 35),
+              count.toString(),
+              style: const TextStyle(fontSize: 35),
             ),
           ),
         ),
@@ -59,10 +57,11 @@ class Card extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                tekst,
-                style: const TextStyle(fontSize: 18),
+                cardText,
+                style: const TextStyle(fontSize: 20),
               ),
-              const Text("procenat"),
+              Text(
+                  "Probability ${(count / cardsLeft * 100).toStringAsFixed(2)}%"),
             ],
           ),
         ),
