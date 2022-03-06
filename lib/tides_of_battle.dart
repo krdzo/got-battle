@@ -1,11 +1,11 @@
 class CardDeck {
   static const cards = {
-    "threes": 2,
-    "twos": 4,
-    "oneFort": 4,
-    "oneSword": 4,
-    "zero": 8,
-    "zeroDie": 2,
+    "Threes": 2,
+    "Twos": 4,
+    "One Fortification": 4,
+    "One Sword": 4,
+    "Zero": 8,
+    "Zero or Die": 2,
     "total": 24,
   };
 }

@@ -45,11 +45,17 @@ class Card extends StatelessWidget {
           ),
         ),
         const Padding(
-          child: Text(
-            "+",
-            style: TextStyle(fontSize: 20),
-          ),
           padding: EdgeInsets.symmetric(horizontal: 10),
+          child: TextButton(
+            onPressed: null,
+            child: Text(
+              "+",
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
         Expanded(
           flex: 8,
