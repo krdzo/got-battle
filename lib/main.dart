@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'tides_of_battle.dart';
+import 'package:provider/provider.dart';
+
+import 'card_deck.dart';
 
 void main() {
   runApp(const GoT());
@@ -10,14 +12,17 @@ class GoT extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Tides of a Battle",
-      home: Scaffold(
-        appBar: AppBar(title: const Text("Battle")),
-        body: Column(
-          children: CardDeck.cards.entries.map((entry) {
-            return Expanded(child: Card(entry.value, entry.key));
-          }).toList(),
+    return ChangeNotifierProvider<CardDeck>(
+      create: (BuildContext context) => CardDeck(),
+      child: MaterialApp(
+        title: "Tides of a Battle",
+        home: Scaffold(
+          appBar: AppBar(title: const Text("Battle")),
+          body: Column(
+            children: CardDeck.fullDeck.entries.map((entry) {
+              return Expanded(child: Card(entry.key));
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -25,13 +30,24 @@ class GoT extends StatelessWidget {
 }
 
 class Card extends StatelessWidget {
-  static int cardsLeft = CardDeck.cards["total"]!;
   final String cardText;
-  final int count;
-  const Card(this.count, this.cardText, {Key? key}) : super(key: key);
+  const Card(this.cardText, {Key? key}) : super(key: key);
+
+
+  void _incrementCount(BuildContext context) {
+    Provider.of<CardDeck>(context, listen: false).incrementField(cardText);
+  }
+
+  void _decrementCount(BuildContext context) {
+    Provider.of<CardDeck>(context, listen: false).decrementField(cardText);
+  }
 
   @override
   Widget build(BuildContext context) {
+    int cardsLeft = Provider.of<CardDeck>(context).getField("total");
+
+    int count = Provider.of<CardDeck>(context).getField(cardText);
+
     return Row(
       children: [
         // Count field
@@ -44,11 +60,11 @@ class Card extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextButton(
-            onPressed: null,
-            child: Text(
+            onPressed: () => _incrementCount(context),
+            child: const Text(
               "+",
               style: TextStyle(
                 fontSize: 25,
@@ -59,16 +75,19 @@ class Card extends StatelessWidget {
         ),
         Expanded(
           flex: 8,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                cardText,
-                style: const TextStyle(fontSize: 20),
-              ),
-              Text(
-                  "Probability ${(count / cardsLeft * 100).toStringAsFixed(2)}%"),
-            ],
+          child: GestureDetector(
+            onTap: () => _decrementCount(context),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  cardText,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                Text("Probability "
+                    "${(count / cardsLeft * 100).toStringAsFixed(2)}%"),
+              ],
+            ),
           ),
         ),
       ],
