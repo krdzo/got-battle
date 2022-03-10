@@ -42,7 +42,14 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(child: RowOfTwoCards()),
           Expanded(child: RowOfTwoCards()),
-          Expanded(child: RowOfTwoCards()),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(child: InfoCard()),
+                Expanded(child: InfoCard()),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -58,13 +65,11 @@ class RowOfTwoCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       color: Colors.greenAccent,
       child: Column(
         children: [
           Expanded(
-            flex: 4,
             child: Row(
               children: [
                 Expanded(child: InfoCard()),
@@ -72,10 +77,10 @@ class RowOfTwoCards extends StatelessWidget {
               ],
             ),
           ),
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Center(child: Text("Sum probability: 100%")),
-           ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Center(child: Text("Sum probability: 100%")),
+          ),
         ],
       ),
     );
