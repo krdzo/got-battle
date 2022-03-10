@@ -50,6 +50,18 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () => debugPrint("some"),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text("Total: 24"),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
