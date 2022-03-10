@@ -38,34 +38,55 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Battle")),
-      body: Card(
-        color: Colors.greenAccent,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-                child: Row(
-                  children: [
-                    Expanded(child: AboutCard()),
-                    Expanded(child: AboutCard()),
-                  ],
-                ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(child: Text("Sum probability: 100%")),
-            )
-          ],
-        ),
+      body: Column(
+        children: [
+          Expanded(child: RowOfTwoCards()),
+          Expanded(child: RowOfTwoCards()),
+          Expanded(child: RowOfTwoCards()),
+        ],
       ),
     );
   }
 }
 
-/// Widget that shows a card name number of left cards and probabilty of drawing
-/// it next.
-class AboutCard extends StatelessWidget {
-  const AboutCard({
+/// Row that can display two cards if the card are related it will
+/// display a footer that has the sum of those two cards probabilitys.
+class RowOfTwoCards extends StatelessWidget {
+  const RowOfTwoCards({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Card(
+      color: Colors.greenAccent,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Row(
+              children: [
+                Expanded(child: InfoCard()),
+                Expanded(child: InfoCard()),
+              ],
+            ),
+          ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Center(child: Text("Sum probability: 100%")),
+           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Widget that shows information about a type of card.
+/// It shows a card name, number of left cards in the deck and
+/// it's probability to be drawn next be drawn next.
+class InfoCard extends StatelessWidget {
+  const InfoCard({
     Key? key,
   }) : super(key: key);
 
@@ -74,29 +95,42 @@ class AboutCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            Text(
-              "8",
-              style: TextStyle(
-                fontSize: 45,
-                fontWeight: FontWeight.w500,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "8",
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  "Zero",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  "Probability: 50%",
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              "Zero",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w500,
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                iconSize: 33,
+                icon: Icon(Icons.add),
+                onPressed: () => debugPrint("pritisnuto"),
               ),
-            ),
-            Text(
-              "Probability: 50%",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-              ),
-            ),
+            )
           ],
         ),
       ),
