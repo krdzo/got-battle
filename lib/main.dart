@@ -1,7 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'card_deck.dart';
+import 'package:flutter/material.dart';
+
+var testKartica = {
+  "Threes": 2,
+  "Twos": 4,
+  "One Fortification": 4,
+  "One Sword": 4,
+  "Zero": 8,
+  "Zero or Die": 2,
+};
+var totalKartica = 24;
 
 void main() {
   runApp(const GoT());
@@ -12,85 +22,84 @@ class GoT extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CardDeck>(
-      create: (BuildContext context) => CardDeck(),
-      child: MaterialApp(
-        title: "Tides of a Battle",
-        home: Scaffold(
-          appBar: AppBar(title: const Text("Battle")),
-          body: Column(
-            children: CardDeck.fullDeck.entries.map((entry) {
-              return Expanded(child: Card(entry.key));
-            }).toList(),
-          ),
+    return const MaterialApp(
+      title: "GoT Battle",
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Battle")),
+      body: Card(
+        color: Colors.greenAccent,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+                child: Row(
+                  children: [
+                    Expanded(child: AboutCard()),
+                    Expanded(child: AboutCard()),
+                  ],
+                ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(child: Text("Sum probability: 100%")),
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-class Card extends StatelessWidget {
-  final String cardText;
-  const Card(this.cardText, {Key? key}) : super(key: key);
-
-
-  void _incrementCount(BuildContext context) {
-    Provider.of<CardDeck>(context, listen: false).incrementField(cardText);
-  }
-
-  void _decrementCount(BuildContext context) {
-    Provider.of<CardDeck>(context, listen: false).decrementField(cardText);
-  }
+/// Widget that shows a card name number of left cards and probabilty of drawing
+/// it next.
+class AboutCard extends StatelessWidget {
+  const AboutCard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int cardsLeft = Provider.of<CardDeck>(context).getField("total");
-
-    int count = Provider.of<CardDeck>(context).getField(cardText);
-
-    return Row(
-      children: [
-        // Count field
-        Expanded(
-          flex: 2,
-          child: Center(
-            child: Text(
-              count.toString(),
-              style: const TextStyle(fontSize: 35),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: TextButton(
-            onPressed: () => _incrementCount(context),
-            child: const Text(
-              "+",
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "8",
               style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+                fontSize: 45,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ),
-        ),
-        Expanded(
-          flex: 8,
-          child: GestureDetector(
-            onTap: () => _decrementCount(context),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  cardText,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                Text("Probability "
-                    "${(count / cardsLeft * 100).toStringAsFixed(2)}%"),
-              ],
+            Text(
+              "Zero",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
+            Text(
+              "Probability: 50%",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
