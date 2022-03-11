@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'card_deck.dart';
+import 'util.dart';
 
 void main() {
   runApp(const GoT());
