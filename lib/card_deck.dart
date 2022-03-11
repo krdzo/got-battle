@@ -1,37 +1,47 @@
 import 'package:flutter/material.dart';
 
 class CardDeckModel with ChangeNotifier {
-  static const startingDeck = {
-    "Threes": 2,
-    "Twos": 4,
-    "One Fortification": 4,
-    "One Sword": 4,
+  static const startingDeck = <String, int>{
     "Zero": 8,
     "Zero or Die": 2,
+    "One Fort": 4,
+    "One Sword": 4,
+    "Two": 4,
+    "Three": 2,
   };
   static const startingTotal = 24;
 
-  var cards = Map.from(startingDeck);
-  int total = startingTotal;
+  // ignore: prefer_typing_uninitialized_variables
+  late final cards;
+  late int total;
 
-  void resetDeck() {
+  CardDeckModel() {
     cards = Map.from(startingDeck);
+    total = startingTotal;
   }
 
-  void decrementField(String field) {
-    if (field == "total") {
-      return;
+  void resetDeck() {
+    for (var key in startingDeck.keys) {
+      cards[key] = startingDeck[key];
     }
 
-    cards[field] -= 1;
-    cards["total"] -= 1;
-    if (cards["total"] == 0) {
+    total = startingTotal;
+    notifyListeners();
+  }
+
+  void decrementCount(String field) {
+    if (cards[field] == 0) return;
+    cards[field]--;
+    total--;
+
+    if (total == 0) {
       resetDeck();
     }
     notifyListeners();
   }
 
-  void incrementField(String field) {
+  void incrementCount(String field) {
+    if (total == startingTotal) return;
     cards[field]++;
     total++;
     notifyListeners();
