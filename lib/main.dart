@@ -2,16 +2,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-var testKartica = {
-  "Threes": 2,
-  "Twos": 4,
-  "One Fortification": 4,
-  "One Sword": 4,
-  "Zero": 8,
-  "Zero or Die": 2,
-};
-var totalKartica = 24;
+import 'card_deck.dart';
 
 void main() {
   runApp(const GoT());
@@ -22,9 +15,12 @@ class GoT extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "GoT Battle",
-      home: HomeScreen(),
+      home: ChangeNotifierProvider<CardDeckModel>(
+        create: (context) => CardDeckModel(),
+        child: HomeScreen(),
+      ),
     );
   }
 }
@@ -40,58 +36,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Battle")),
       body: Column(
         children: [
-          Expanded(child: RowOfTwoCards()),
-          Expanded(child: RowOfTwoCards()),
           Expanded(
-            child: Row(
+            child: GridView.count(
+              crossAxisCount: 2,
               children: [
-                Expanded(child: InfoCard()),
-                Expanded(child: InfoCard()),
+                for (var key in CardDeckModel.startingDeck.keys)
+                  InfoCard(cardName: key)
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () => debugPrint("some"),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text("Total: 24"),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Row that can display two cards if the card are related it will
-/// display a footer that has the sum of those two cards probabilitys.
-class RowOfTwoCards extends StatelessWidget {
-  const RowOfTwoCards({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.greenAccent,
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(child: InfoCard()),
-                Expanded(child: InfoCard()),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Center(child: Text("Sum probability: 100%")),
           ),
         ],
       ),
@@ -103,12 +55,18 @@ class RowOfTwoCards extends StatelessWidget {
 /// It shows a card name, number of left cards in the deck and
 /// it's probability to be drawn next be drawn next.
 class InfoCard extends StatelessWidget {
+  final String cardName;
+
   const InfoCard({
     Key? key,
+    required this.cardName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int total = Provider.of<CardDeckModel>(context).total;
+    int cardCount = Provider.of<CardDeckModel>(context).getCount(cardName);
+
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Card(
@@ -119,21 +77,21 @@ class InfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "8",
+                  "$cardCount",
                   style: TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  "Zero",
+                  cardName,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  "Probability: 50%",
+                  "Probability: ${(cardCount / total * 100).toStringAsFixed(2)}",
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                   ),
@@ -145,12 +103,16 @@ class InfoCard extends StatelessWidget {
               child: IconButton(
                 iconSize: 33,
                 icon: Icon(Icons.add),
-                onPressed: () => debugPrint("pritisnuto"),
+                onPressed: () => _incrementCount(context),
               ),
             )
           ],
         ),
       ),
     );
+  }
+
+  _incrementCount(BuildContext context) {
+    Provider.of<CardDeckModel>(context, listen: false).incrementField(cardName);
   }
 }

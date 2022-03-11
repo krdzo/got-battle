@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-class CardDeck with ChangeNotifier {
-  static const fullDeck = {
+class CardDeckModel with ChangeNotifier {
+  static const startingDeck = {
     "Threes": 2,
     "Twos": 4,
     "One Fortification": 4,
     "One Sword": 4,
     "Zero": 8,
     "Zero or Die": 2,
-    "total": 24,
   };
-  var cards = Map.from(fullDeck);
+  static const startingTotal = 24;
+
+  var cards = Map.from(startingDeck);
+  int total = startingTotal;
 
   void resetDeck() {
-    cards = Map.from(fullDeck);
+    cards = Map.from(startingDeck);
   }
 
   void decrementField(String field) {
@@ -30,16 +32,12 @@ class CardDeck with ChangeNotifier {
   }
 
   void incrementField(String field) {
-    if (field == "total") {
-      resetDeck();
-    } else {
-      cards[field] += 1;
-      cards["total"] += 1;
-    }
+    cards[field]++;
+    total++;
     notifyListeners();
   }
 
-  int getField(String field) {
+  int getCount(String field) {
     return cards[field];
   }
 }
