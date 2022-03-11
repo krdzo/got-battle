@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Text("Total: $total"),
+                  child: Text("Remaning: $total/${CardDeckModel.startingTotal}"),
                 ),
               ),
             ),
@@ -94,30 +94,33 @@ class InfoCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "$cardCount",
-                  style: TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.w500,
+            InkWell(
+              onTap: () => _decrementCount(context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "$cardCount",
+                    style: TextStyle(
+                      fontSize: 45,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  cardName,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
+                  Text(
+                    cardName,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  "Probability: ${(cardCount / total * 100).toStringAsFixed(2)}",
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
+                  Text(
+                    "Probability: ${(cardCount / total * 100).toStringAsFixed(2)}",
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -134,6 +137,10 @@ class InfoCard extends StatelessWidget {
   }
 
   _incrementCount(BuildContext context) {
-    Provider.of<CardDeckModel>(context, listen: false).incrementField(cardName);
+    Provider.of<CardDeckModel>(context, listen: false).incrementCount(cardName);
+  }
+
+  _decrementCount(BuildContext context) {
+    Provider.of<CardDeckModel>(context, listen: false).decrementCount(cardName);
   }
 }
