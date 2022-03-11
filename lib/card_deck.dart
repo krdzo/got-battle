@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CardDeckModel with ChangeNotifier {
   static const startingDeck = <String, int>{
     "Zero": 8,
-    "Zero or Die": 2,
+    "Zero and Die": 2,
     "One Fort": 4,
     "One Sword": 4,
     "Two": 4,

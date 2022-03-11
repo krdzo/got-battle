@@ -18,6 +18,11 @@ class GoT extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "GoT Battle",
+      theme: ThemeData(
+          primarySwatch: createMaterialColor(Color(0xff560b0d)),
+          scaffoldBackgroundColor: Color(0xff67615d)
+          // primaryColor: Color(0xFF3a120f),
+          ),
       home: ChangeNotifierProvider<CardDeckModel>(
         create: (context) => CardDeckModel(),
         child: HomeScreen(),
@@ -36,20 +41,22 @@ class HomeScreen extends StatelessWidget {
     int total = Provider.of<CardDeckModel>(context).total;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Battle")),
+      appBar: AppBar(
+        title: const Text("Battle"),
+      ),
       body: Column(
         children: [
           Expanded(
-            child: LayoutBuilder(builder: (context, constraints) =>
-              GridView.count(
-                childAspectRatio: (constraints.maxWidth / 2) / (constraints.maxHeight / 3),
-                crossAxisCount: 2,
-                children: [
-                  for (var key in CardDeckModel.startingDeck.keys)
-                    InfoCard(cardName: key)
-                ],
-              )
-            ),
+            child: LayoutBuilder(
+                builder: (context, constraints) => GridView.count(
+                      childAspectRatio: (constraints.maxWidth / 2) /
+                          (constraints.maxHeight / 3),
+                      crossAxisCount: 2,
+                      children: [
+                        for (var key in CardDeckModel.startingDeck.keys)
+                          InfoCard(cardName: key)
+                      ],
+                    )),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -58,7 +65,8 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Text("Remaning: $total/${CardDeckModel.startingTotal}"),
+                  child:
+                      Text("Remaning: $total / ${CardDeckModel.startingTotal}"),
                 ),
               ),
             ),
@@ -86,22 +94,25 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int total = Provider.of<CardDeckModel>(context).total;
-    int cardCount = Provider.of<CardDeckModel>(context).getCount(cardName);
+    var deck = Provider.of<CardDeckModel>(context);
+    int total = deck.total;
+    int cardCount = deck.getCount(cardName);
 
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Card(
+        color: Color(0xffdedbdb),
         child: Stack(
           fit: StackFit.expand,
           children: [
             InkWell(
+              splashColor: Color(0xff7d7b7b),
               onTap: () => _decrementCount(context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "$cardCount",
+                    "${deck.getCount(cardName)}",
                     style: TextStyle(
                       fontSize: 45,
                       fontWeight: FontWeight.w500,
@@ -126,6 +137,7 @@ class InfoCard extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: IconButton(
+                splashColor: Color(0xff7d7b7b),
                 iconSize: 33,
                 icon: Icon(Icons.add),
                 onPressed: () => _incrementCount(context),
