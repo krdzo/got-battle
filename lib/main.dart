@@ -32,22 +32,43 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int total = Provider.of<CardDeckModel>(context).total;
+
     return Scaffold(
       appBar: AppBar(title: const Text("Battle")),
       body: Column(
         children: [
           Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              children: [
-                for (var key in CardDeckModel.startingDeck.keys)
-                  InfoCard(cardName: key)
-              ],
+            child: LayoutBuilder(builder: (context, constraints) =>
+              GridView.count(
+                childAspectRatio: (constraints.maxWidth / 2) / (constraints.maxHeight / 3),
+                crossAxisCount: 2,
+                children: [
+                  for (var key in CardDeckModel.startingDeck.keys)
+                    InfoCard(cardName: key)
+                ],
+              )
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () => _resetDeck(context),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text("Total: $total"),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  _resetDeck(BuildContext context) {
+    Provider.of<CardDeckModel>(context, listen: false).resetDeck();
   }
 }
 
