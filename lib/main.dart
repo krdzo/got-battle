@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int total = Provider.of<CardDeckModel>(context).total;
+    int total = Provider.of<CardDeckModel>(context).remaining;
 
     return Scaffold(
       appBar: AppBar(
@@ -95,7 +95,7 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deck = Provider.of<CardDeckModel>(context);
-    int total = deck.total;
+    int total = deck.remaining;
     int cardCount = deck.getCount(cardName);
 
     return Padding(

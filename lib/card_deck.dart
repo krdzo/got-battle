@@ -13,11 +13,11 @@ class CardDeckModel with ChangeNotifier {
 
   // ignore: prefer_typing_uninitialized_variables
   late final cards;
-  late int total;
+  late int remaining;
 
   CardDeckModel() {
     cards = Map.from(startingDeck);
-    total = startingTotal;
+    remaining = startingTotal;
   }
 
   void resetDeck() {
@@ -25,25 +25,27 @@ class CardDeckModel with ChangeNotifier {
       cards[key] = startingDeck[key];
     }
 
-    total = startingTotal;
+    remaining = startingTotal;
     notifyListeners();
   }
 
   void decrementCount(String field) {
     if (cards[field] == 0) return;
-    cards[field]--;
-    total--;
 
-    if (total == 0) {
+    cards[field]--;
+    remaining--;
+
+    if (remaining == 0) {
       resetDeck();
     }
     notifyListeners();
   }
 
   void incrementCount(String field) {
-    if (total == startingTotal) return;
+    if (cards[field] == startingDeck[field]) return;
+
     cards[field]++;
-    total++;
+    remaining++;
     notifyListeners();
   }
 
