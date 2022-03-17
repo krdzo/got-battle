@@ -38,7 +38,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int total = Provider.of<CardDeckModel>(context).remaining;
+    var deckProvider = Provider.of<CardDeckModel>(context);
+    var deck = deckProvider.deck;
+    int remainingInDeck = deckProvider.remainingInDeck;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,8 +55,7 @@ class HomeScreen extends StatelessWidget {
                           (constraints.maxHeight / 3),
                       crossAxisCount: 2,
                       children: [
-                        for (var key in CardDeckModel.startingDeck.keys)
-                          InfoCard(cardName: key)
+                        for (var cards in deck) InfoCard(cardGroup: cards)
                       ],
                     )),
           ),
@@ -65,8 +66,8 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child:
-                      Text("Remaning: $total / ${CardDeckModel.startingTotal}"),
+                  child: Text(
+                      "Remaning: $remainingInDeck  / ${CardDeckModel.totalNumberOfCardsInDeck}"),
                 ),
               ),
             ),
@@ -85,18 +86,18 @@ class HomeScreen extends StatelessWidget {
 /// It shows a card name, number of left cards in the deck and
 /// it's probability to be drawn next be drawn next.
 class InfoCard extends StatelessWidget {
-  final String cardName;
+  final Cards cardGroup;
 
   const InfoCard({
     Key? key,
-    required this.cardName,
+    required this.cardGroup,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var deck = Provider.of<CardDeckModel>(context);
-    int total = deck.remaining;
-    int cardCount = deck.getCount(cardName);
+    String cardsName = cardGroup.name;
+    int numberOfCards = cardGroup.remainingCards;
+    int remainingDeck = Provider.of<CardDeckModel>(context).remainingInDeck;
 
     return Padding(
       padding: const EdgeInsets.all(0),
@@ -112,21 +113,21 @@ class InfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${deck.getCount(cardName)}",
+                    "$numberOfCards",
                     style: TextStyle(
                       fontSize: 45,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
-                    cardName,
+                    cardsName,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
-                    "Probability: ${(cardCount / total * 100).toStringAsFixed(2)}",
+                    "Probability: ${(numberOfCards / remainingDeck * 100).toStringAsFixed(2)}",
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                     ),
@@ -150,10 +151,12 @@ class InfoCard extends StatelessWidget {
   }
 
   _incrementCount(BuildContext context) {
-    Provider.of<CardDeckModel>(context, listen: false).incrementCount(cardName);
+    Provider.of<CardDeckModel>(context, listen: false)
+        .incrementCount(cardGroup);
   }
 
   _decrementCount(BuildContext context) {
-    Provider.of<CardDeckModel>(context, listen: false).decrementCount(cardName);
+    Provider.of<CardDeckModel>(context, listen: false)
+        .decrementCount(cardGroup);
   }
 }

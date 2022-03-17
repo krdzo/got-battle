@@ -1,55 +1,47 @@
 import 'package:flutter/material.dart';
 
 class CardDeckModel with ChangeNotifier {
-  static const startingDeck = <String, int>{
-    "Zero": 8,
-    "Zero and Die": 2,
-    "One Fort": 4,
-    "One Sword": 4,
-    "Two": 4,
-    "Three": 2,
-  };
-  static const startingTotal = 24;
+  static const totalNumberOfCardsInDeck = 24;
+  final deck = [
+    Cards("Zero", 8),
+    Cards("Zero and Die", 2),
+    Cards("One Fort", 4),
+    Cards("One Sword", 4),
+    Cards("Two", 4),
+    Cards("Three", 2),
+  ];
+  int remainingInDeck = totalNumberOfCardsInDeck;
 
-  // ignore: prefer_typing_uninitialized_variables
-  late final cards;
-  late int remaining;
+  void decrementCount(Cards cards) {
+    if (cards.remainingCards == 0) return;
+    remainingInDeck--;
+    cards.remainingCards--;
+    if (remainingInDeck == 0) resetDeck();
+    notifyListeners();
+  }
 
-  CardDeckModel() {
-    cards = Map.from(startingDeck);
-    remaining = startingTotal;
+  void incrementCount(Cards cards) {
+    if (cards.remainingCards == cards.cardsInTotal) return;
+    remainingInDeck++;
+    cards.remainingCards++;
+    notifyListeners();
   }
 
   void resetDeck() {
-    for (var key in startingDeck.keys) {
-      cards[key] = startingDeck[key];
+    for (var cards in deck) {
+      cards.remainingCards = cards.cardsInTotal;
     }
-
-    remaining = startingTotal;
+    remainingInDeck = totalNumberOfCardsInDeck;
     notifyListeners();
   }
+}
 
-  void decrementCount(String field) {
-    if (cards[field] == 0) return;
+class Cards {
+  late int remainingCards;
+  final int cardsInTotal;
+  final String name;
 
-    cards[field]--;
-    remaining--;
-
-    if (remaining == 0) {
-      resetDeck();
-    }
-    notifyListeners();
-  }
-
-  void incrementCount(String field) {
-    if (cards[field] == startingDeck[field]) return;
-
-    cards[field]++;
-    remaining++;
-    notifyListeners();
-  }
-
-  int getCount(String field) {
-    return cards[field];
+  Cards(this.name, this.cardsInTotal) {
+    remainingCards = cardsInTotal;
   }
 }
