@@ -1,6 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,13 +16,13 @@ class GoT extends StatelessWidget {
     return MaterialApp(
       title: "GoT Battle",
       theme: ThemeData(
-          primarySwatch: createMaterialColor(Color(0xff560b0d)),
-          scaffoldBackgroundColor: Color(0xff67615d)
+          primarySwatch: createMaterialColor(const Color(0xff560b0d)),
+          scaffoldBackgroundColor: const Color(0xff67615d)
           // primaryColor: Color(0xFF3a120f),
           ),
       home: ChangeNotifierProvider<CardDeckModel>(
         create: (context) => CardDeckModel(),
-        child: HomeScreen(),
+        child: const HomeScreen(),
       ),
     );
   }
@@ -102,33 +99,33 @@ class InfoCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Card(
-        color: Color(0xffdedbdb),
+        color: const Color(0xffdedbdb),
         child: Stack(
           fit: StackFit.expand,
           children: [
             InkWell(
-              splashColor: Color(0xff7d7b7b),
+              splashColor: const Color(0xff7d7b7b),
               onTap: () => _decrementCount(context),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "$numberOfCards",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 45,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     cardsName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     "Probability: ${(numberOfCards / remainingDeck * 100).toStringAsFixed(2)}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -138,9 +135,9 @@ class InfoCard extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: IconButton(
-                splashColor: Color(0xff7d7b7b),
+                splashColor: const Color(0xff7d7b7b),
                 iconSize: 33,
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () => _incrementCount(context),
               ),
             )
